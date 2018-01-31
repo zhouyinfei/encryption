@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.junit.Test;
 
 import com.zhuyun.aes.AESUtil;
+import com.zhuyun.ecc.ECCUtil;
 import com.zhuyun.rsa.RSAUtil;
 
 
@@ -15,11 +16,18 @@ public class TestHttpEncrypt {
 	@Test
 	public void testGenerateKeyPair() throws Exception{
 		//生成RSA公钥和私钥，并Base64编码
-		KeyPair keyPair = RSAUtil.getKeyPair();
-		String publicKeyStr = RSAUtil.getPublicKey(keyPair);
-		String privateKeyStr = RSAUtil.getPrivateKey(keyPair);
-		System.out.println("RSA公钥Base64编码:" + publicKeyStr);
-		System.out.println("RSA私钥Base64编码:" + privateKeyStr);
+//		KeyPair keyPair = RSAUtil.getKeyPair();
+//		String publicKeyStr = RSAUtil.getPublicKey(keyPair);
+//		String privateKeyStr = RSAUtil.getPrivateKey(keyPair);
+//		System.out.println("RSA公钥Base64编码:" + publicKeyStr);
+//		System.out.println("RSA私钥Base64编码:" + privateKeyStr);
+		
+		//生成ECC公钥和私钥，并Base64编码
+		KeyPair keyPair = ECCUtil.getKeyPair();
+		String publicKeyStr = ECCUtil.getPublicKey(keyPair);
+		String privateKeyStr = ECCUtil.getPrivateKey(keyPair);
+		System.out.println("ECC公钥Base64编码:" + publicKeyStr);
+		System.out.println("ECC私钥Base64编码:" + privateKeyStr);
 	}
 	
 	
@@ -48,15 +56,15 @@ public class TestHttpEncrypt {
 	//测试  服务器解密APP的请求内容
 	@Test
 	public void testServerDecrypt() throws Exception{
-		String result = "{\"ak\":\"iLHfi1XRz4gnirU2OKggNCkz5x0i6aSonm1u3bE+ncI4AuiUG9LX2nbrQV/lWUIqwRp/q/P+SrIPnh5JbgEzSi+K46N4enyDFYbWpC6gONqQpF3tNt6Q1Y+UdX3L5l9hFPAS9tIhI2kT10AbhMox2kKOhr6ZQmmC/A3qeFEbTuUUf8bOCr4nqz4qSNyCZgcJdoAQonJeN8IilWuTD+LpbllNimFNR/sGY5jlyjvVydrdpNs15oFaXtfTLUjSXe2e5Ha1r3K7lP93C2E+KL55001xFJhQZcZXa9ZlYCMQgI+2cJlED4uA3bl2ul1dtnvXK+41Yky9e9QrRDc5luqB6w==\",\"apk\":\"P0SJaTzKWuBMi/fj2G8wwZ9+FWFIrE3BAwdoXwIfiTxptYXumLxnMpZZkCBNqQBvhvSzAEPyA3c9kCjhYCxdTnV61N+T/DZM+B62u4vqCy1MsFZT06BJjrNFW29AfSRNmQdKhJEyDPARcf5FerULbIDWGvrHzHys7jVbicjlYWtQpnyQf5Wl0Bd7taEqSwUSKejoEsN74frwlk8Hu4KP4bLvVy9S7DjOP2juXbVkHYaKgVmhM2V3yElVOEb1TDCLSFMNtug74+7itlzlChDR8wEWdh11vQcp69iGmDXMo2vcJ9tO1YZP+hCYZvujHMRwAzHtkqafEoSJsvSN8PWS+qmQdUX2frf6A0cl6SGnTbGUUEV/w0rBIU/oGhP8cl8+ghqPbp7HzvwXFOJsUciy+7tsLRrdDpLeOcz+fh/c0RSpCKNEZtRmcuUqBQ+3tZKYGPhl+StsFh3s1RCkhI4EsSD95bCbES4r1r1E4dytdELi0ebJug7Quk3rwFVXGX9o4wrnnvcbTaSyyAAg2YTNfA==\",\"ct\":\"mkC7hE/crHbmW+h2OCMBANCA64xtMFLTRmLahOU+UysZrXzK30qRj6RUcvpQz4mJ6EOYYAK34+BQBkN9gapdIw==\"}";
+		String result = "{\"ak\":\"BGNVrPwbMH8FbR09kF1Ud06o4KGuYm+fruznvLjP95T1BmlXNQi1FBol28k1TRDDbrkc7XomAGD88Q1+3uRJeLPVX04bEqB4LEWPKbpJmsUDn8WYzCubWgmKKMYeyF4IKSTp/7dhlUa3oTTveQ==\",\"apk\":\"MHW1AiTkK6+IbludCThMmKB7muNQrjf6W8tVo1jLXj6s6eUGcFDIm70eNGoJl185yTCkbaGmvJEq8F0BtPLkR7in5n/DiwAicQyXm4wFvWyJl6CEoTYiLffRVL6dHqNm8J2/6udkoCGmqnLsrQXeLZsIueJrZf2rNTWOr3dT4bI=\",\"ct\":\"33itCWpSdZbjda8yJ05FyLDsdZocDUeepBNKxgs0MiR3VH436FbxewnRqT35SkZIXq+eNv3RPFHZIYwyzIWr4A==\"}";
 		System.out.println(HttpEncryptUtil.serverDecrypt(result));
 	}
 	
 	//测试 服务器加密响应给APP的内容
 	@Test
 	public void testserverEncrypt() throws Exception{
-		String aesKeyStr = "dSRWXM6IkWkKk7I/ZGouqA==";
-		String appPublicKeyStr = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqqKPH/L0AZyn1fJ9xK2ol2nHY5jPu8qw7COwFukkRdr2j0oNJmD8vCTmxgzKWV0CkihiJ7Y0OekrGc78JL5tpL2SqeZTLa2bCJZJaTM3KFOXYb82nc8Xbr2caDnf7mgjyt0AALHG/YfYwd7hifZRB6Ct89uBTn6W5x/7oxGT6D1C8siXKV+99AZPMv2HobglWyquyjIL5TZOhYmCMzFUPMOiXzzGYXMZj2gmfUFXMf/2jitMPGg3zQPJxPSYunjoE1fMInk1obEhEfU8n2YxT5ZbGMWZGjt4hZwF+FJJLV+WOantfUJ4rMBB8qxgQtkT+VzddfLCEoyy4Rl50fvjzwIDAQAB";
+		String aesKeyStr = "qCrjqeeICRbN6DqxIhBEZA==";
+		String appPublicKeyStr = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFXblKT9aq5X86K+d5RzXpspH4GVwqbSkUc80EbkJn7+ZIejEWba/Io9c5DftUy0AiGXlz9/HgFPdhYBuz5p5rg==";
 		String content = "{\"retcode\":\"200\"}";
 		System.out.println(HttpEncryptUtil.serverEncrypt(appPublicKeyStr, aesKeyStr, content));
 	}
@@ -69,7 +77,7 @@ public class TestHttpEncrypt {
 		InputStream in = TestHttpEncrypt.class.getClassLoader().getResourceAsStream("client.properties");
 		prop.load(in);
 		String appPrivateKey = prop.getProperty("app.private.key");
-		String content = "{\"ak\":\"kFUEiOKVNUUEDBS2hFTF1DDiPMFjbjgEzoLPABGntjgRvK/KnF1qi8gimDkmlQRxcvNLvHwk60AUX69lIhiTZp+qIjPnAEmTEY+BI7tgj6dVltrhR7bXHOP2LS0jIdHP/YmAWqf+/C1fTHAuCWv0ifNSYEiKPSCCLDHal1nPSTkWXUgkC+J02dE99o3zeiGwSwbeFsGCcZnzZuKMXJm3yKBsLEqq8kUsn9yElHbQ6Ax52VFz4fq9sNqucEREgT8EJ79IZFhbYjBxBU+oTqlxK6H3PNCu6EZLJANpWuXwSqdrSUefYi4A5RlqJN1OzMVtcanzMSifH243Bw95eHiclA==\",\"ct\":\"4lzwwJfKxVRfNvqLXTwmSB2KSMUZtbeky6fvojbJIV0=\"}";
+		String content = "{\"ak\":\"BPOujAK4Wzs0lKrygUHggarzmmaSiZejB7OkMZ1emPGTKZjUsb3YgSWRGClg0Z0uBQt5Zby8DKkZgGdDnEeMyjc4JJ1Y1q831/tcP7VkebLGNEHfEpGm15qE2GekJ5b/R6pVjIlUZNKtuaTpIQ==\",\"ct\":\"WcVmcfIr6lUISjx6MmxicI6ODyCs5QcVX6dQgXMkP90=\"}";
 		System.out.println(HttpEncryptUtil.appDecrypt(appPrivateKey, content));
 	}
 }
